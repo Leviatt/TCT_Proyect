@@ -186,3 +186,4 @@ new_process.generate_ST_OPENPLC([sup],
 new_process.generate_image(
     [M1, M2, B_A, Blade, sup_BA, sup, plant, model_M1, Buffer_fill, REQ_Buffer,
      model_M2, REQ_repair, repair])
+print(new_process)

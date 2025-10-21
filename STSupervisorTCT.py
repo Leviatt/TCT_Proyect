@@ -796,3 +796,10 @@ class process:
 
         case += "\tEND_CASE;\n  "
         return case
+    def __str__(self):
+        if not self.automatas:
+            return "No automata loaded."
+        out = "Automata loaded in process:\n"
+        for name, aut in self.automatas.items():
+            out += f"  - {name} ({len(aut.states)} states, {len(aut.transitions)} transitions)\n"
+        return out
