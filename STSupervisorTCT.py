@@ -129,6 +129,9 @@ class process:
         pytct.init(route, overwrite=True)
         self.init = route + '\n' + 'CLOCK 0\n'
         self.route = route
+        self.images_dir = os.path.join(self.route, "Images")
+        os.makedirs(self.images_dir, exist_ok=True)
+
 
     def load_automata(self, names: list):  # Load the TCT synthesized automata
         for name in names:
@@ -163,7 +166,7 @@ class process:
             else:
                 axs = axs.flatten()
             for i in range(len(nameList)):
-                ruta = self.route + '/' + nameList[i] + ".GIF"
+                ruta = os.path.join(self.images_dir, f"{nameList[i]}.png")
                 imagen = Image.open(ruta)
                 # Mostrar la imagen
                 axs[i].imshow(imagen)
@@ -209,7 +212,10 @@ class process:
             fontzise = self.adjust_fontsize(label)
             minlen = str(int(fontzise) // 6)
             dot.edge(start, end, label=label, fontsize=fontzise, constraint='true', minlen=minlen)  #
-        dot.render(self.route + "\\Images\\" + name, format='png', cleanup=True)
+        # dot.render(self.route + "\\Images\\" + name, format='png', cleanup=True)
+        output_path = os.path.join(self.images_dir, name)  # sin extensión
+        dot.render(output_path, format='png', cleanup=True)
+
         return
 
     def complete_spec(self, name):  # For an automaton add all the self-loops of uncontrollable events
@@ -320,9 +326,12 @@ class process:
             for linea in archivo:
                 if '# states: ' in linea:
                     aux = linea.split()
-                    name = aux[0]
-                    if "\\" in name:
-                        name = name.split("\\")[1]
+                    name = aux[0].strip()
+                    # Normaliza separadores y quédate solo con el nombre base (sin ruta)
+                    name = os.path.basename(name.replace("\\", "/"))
+                    # (Opcional) si el nombre trae extensión, quítala:
+                    name = os.path.splitext(name)[0]
+
                     num_state = int(aux[3])
                     self.new_automaton(name)
                 if "marker" in linea and not 'none' in linea:
