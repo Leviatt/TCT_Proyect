@@ -3,7 +3,7 @@ import os
 
 from PIL import Image
 import matplotlib.pyplot as plt
-import pytct
+import pitct as pytct
 from graphviz import Digraph
 
 user_route = "TCTX64_20210701/"  # Project route
@@ -172,7 +172,7 @@ class process:
 
     def generate_image(self, name_list: list):  # Generate image of autamaton list
         for name in name_list:
-            self.aux_generate_image(name)
+          self.aux_generate_image(name)
 
     # Función para ajustar el tamaño de la fuente basado en la longitud del label
     def adjust_fontsize(self, label):
